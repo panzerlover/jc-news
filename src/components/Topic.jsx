@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import LoadingSpinner from "./Spinner";
 import ErrorPage from "./ErrorPage";
 import { getArticlesByTopicSlug } from "../utils/api";
-import {upper} from "../utils/helpers"; 
-import { Accordion, Badge, Card, ListGroup } from "react-bootstrap";
-import AccordionItem from 'react-bootstrap/esm/AccordionItem';
+import { upper } from "../utils/helpers"; 
+import { ListGroup } from "react-bootstrap";
+
 
 
 export default function Topic (){
