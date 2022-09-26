@@ -20,7 +20,6 @@ export default function ArticleList(){
             setLoading(false);
             setError(false);
         }).catch((err)=> {
-            console.error(err);
             setLoading(false);
             setError(true);
         })
