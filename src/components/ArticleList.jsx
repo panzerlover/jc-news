@@ -15,12 +15,10 @@ export default function ArticleList(){
     useEffect(()=> {
         setLoading(true);
         getArticles().then((res)=> {
-            console.log(res.articles);
             setArticles(res.articles);
             setLoading(false);
             setError(false);
         }).catch((err)=> {
-            console.error(err);
             setLoading(false);
             setError(true);
         })
@@ -44,9 +42,9 @@ export default function ArticleList(){
                                     {article.title}
                                 </Card.Title>
                                 <Card.Text>
-                                <small classname="text-muted">author: {article.author} </small>
-                                <small classname="text-muted">created at: {article.created_at} </small>
-                                <small classname="text-muted">votes: {article.votes} </small>
+                                <small className="text-muted">author: {article.author} </small>
+                                <small className="text-muted">created at: {article.created_at} </small>
+                                <small className="text-muted">votes: {article.votes} </small>
                                 </Card.Text>
                             </Card.Body>
                             <Card.Footer>
