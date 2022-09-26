@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import Spinner from "react-bootstrap/Spinner";
 import ListGroup from 'react-bootstrap/ListGroup';
 import Card from 'react-bootstrap/Card';
 
 import { getArticles } from "../utils/api";
+import LoadingSpinner from "./Spinner";
+import ErrorPage from "./ErrorPage";
 
 export default function ArticleList(){
 
@@ -15,7 +16,6 @@ export default function ArticleList(){
     useEffect(()=> {
         setLoading(true);
         getArticles().then((res)=> {
-            console.log(res.articles);
             setArticles(res.articles);
             setLoading(false);
             setError(false);
@@ -26,27 +26,23 @@ export default function ArticleList(){
         })
     }, [])
 
-    if (loading) return (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      );
-    if (error) return <p>Oops, something went wrong :(</p>
+    if (loading) return <LoadingSpinner loadingType="Articles"/>;
+    if (error) return <ErrorPage />
 
     return (
-        <ListGroup>
+        <ListGroup variant="flush">
             {articles.map((article)=> {
                 return (
-                    <ListGroup.Item>
+                    <ListGroup.Item key={article.article_id}>
                         <Card>
                             <Card.Body>
                                 <Card.Title>
                                     {article.title}
                                 </Card.Title>
                                 <Card.Text>
-                                <small classname="text-muted">author: {article.author} </small>
-                                <small classname="text-muted">created at: {article.created_at} </small>
-                                <small classname="text-muted">votes: {article.votes} </small>
+                                <small className="text-muted">author: {article.author} </small>
+                                <small className="text-muted">created at: {article.created_at} </small>
+                                <small className="text-muted">votes: {article.votes} </small>
                                 </Card.Text>
                             </Card.Body>
                             <Card.Footer>
