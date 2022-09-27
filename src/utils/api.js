@@ -16,6 +16,12 @@ export const getSingleArticle = (id) => {
     return api.get(`/articles/${id}`).then(res=> res.data);
 }
 
+export const voteOnArticle = (id, vote) => {
+    console.log(vote);
+    return api.patch(`/articles/${id}`, {inc_votes: vote})
+    .then(res => res.data);
+}
+
 export const getTopics = () => {
     return api.get('topics').then((res)=> res.data);
 }
