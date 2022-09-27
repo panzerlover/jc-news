@@ -8,10 +8,14 @@ export const getArticles= () => {
     return api.get('articles').then((res)=>  res.data);
 };
 
-export const getTopics = () => {
-    return api.get('topics').then((res)=> res.data);
-}
-
 export const getArticlesByTopicSlug = (slug) => {
     return api.get('/articles', {params: {topic: slug}}).then(res => res.data);
+}
+
+export const getSingleArticle = (id) => {
+    return api.get(`/articles/${id}`).then(res=> res.data);
+}
+
+export const getTopics = () => {
+    return api.get('topics').then((res)=> res.data);
 }

@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import { Row, Col, Card, Container, Button, Badge } from "react-bootstrap";
-import { Modal, Button } from "react-bootstrap";
+import { Row, Col, Card, Container, Badge } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 
 import { getArticles, getArticlesByTopicSlug } from "../utils/api";
-import { upper } from "../utils/helpers";
+import { upper, dateDiff } from "../utils/helpers";
 import LoadingSpinner from "./Spinner";
 import ErrorPage from "./ErrorPage";
-import { useParams } from "react-router-dom";
-import { dateDiff } from "../utils/helpers";
 import ArticleModal from "./ArticleModal";
 
 export default function ArticleList(){
@@ -21,7 +19,6 @@ export default function ArticleList(){
     const [show, setShow] = useState(false);
     const [article, setArticle] = useState({});
 
-    const handleClose = () => setShow(false);
     const handleShow = (event, article) => {
         setArticle(article);
         setShow(true);
@@ -71,18 +68,19 @@ export default function ArticleList(){
         : <></>
         }
         <Container>
+        <ArticleModal show={show} setShow={setShow} article={article}/>
         <Row xs={1} md={2} lg={3} className="g-4">
             {articles.map((article)=> {
                 return (
                     <Col key={article.article_id}>
-                    <Card >
+                    <Card onClick={(event) => handleShow(event, article)}>
                         <Card.Body>
                             <Card.Title>
                                 {article.title}
                             </Card.Title>
                             <Card.Text>
                             <small className="text-muted">author: {article.author} </small>
-                            <small className="text-muted">created at: {article.created_at} </small>
+                            <small className="text-muted">{dateDiff(article.created_at)} </small>
                             <small className="text-muted">votes: {article.votes} </small>
                             </Card.Text>
                         </Card.Body>

@@ -1,5 +1,4 @@
-import Spinner from "react-bootstrap/Spinner";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Spinner } from "react-bootstrap";
 
 export default function LoadingSpinner({loadingType}){
     return (
