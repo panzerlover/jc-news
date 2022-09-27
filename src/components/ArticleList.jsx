@@ -77,6 +77,7 @@ export default function ArticleList(){
                         <Card.Footer>
                             <small className="text-muted">{article.topic}</small>
 
+
                         </Card.Footer>
                     </Card>
                     </Col>
