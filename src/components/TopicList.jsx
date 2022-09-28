@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Button, Container, ListGroup } from 'react-bootstrap';
-import Accordion from 'react-bootstrap/Accordion';
-import AccordionItem from 'react-bootstrap/esm/AccordionItem';
+import { Container, ListGroup } from 'react-bootstrap';
 
 import { getTopics } from '../utils/api';
 import { upper } from '../utils/helpers';
+
 import ErrorPage from './ErrorPage';
 import LoadingSpinner from './Spinner';
 
@@ -14,7 +13,6 @@ export default function TopicList(){
     const [error, setError] = useState(false);
     const [page, setPage] = useState(1);
     const [topics, setTopics] = useState([]);
-    const [selectedTopic, setSelectedtopic] = useState("");
 
     useEffect(()=> {
         setLoading(true);
@@ -28,11 +26,6 @@ export default function TopicList(){
         })
 
     }, []);
-
-    useEffect(()=> {
-
-
-    }, [selectedTopic])
 
     if (loading) return <LoadingSpinner loadingType="topics"/>
     if (error) return <ErrorPage />
