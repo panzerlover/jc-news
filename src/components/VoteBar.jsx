@@ -14,11 +14,11 @@ export default function VoteBar({votes, castVote}){
     }
 
     return (
-        <Row style={{padding: '0.2rem'}}>
-        <Col className="m-auto">
+        <Row style={{padding: '0.5rem'}}>
+        <Col className="m-auto" style={{textAlign: 'right'}}>
         Votes: {votes + vote}
         </Col>
-        <Col>
+        <Col style={{textAlign: 'left'}}>
         <ButtonGroup>
             <Button variant="success" value="1" onClick={makeVote}>&#8593;</Button>
             <Button variant="danger" value="-1" onClick={makeVote}>&#8595;</Button>

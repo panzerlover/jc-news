@@ -4,4 +4,10 @@
 
 body {
   padding-top: 70px;
+  padding-bottom: 70px;
+}
+
+.float{
+  position: fixed;
+  top: 70px;
 }

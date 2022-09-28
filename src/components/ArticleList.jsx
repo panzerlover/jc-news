@@ -1,46 +1,42 @@
 import { useEffect, useState } from "react";
-import { Row, Col, Card, Container, Badge } from "react-bootstrap";
+import { Row, Col, Card, Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
-import { getArticles, getArticlesByTopicSlug } from "../utils/api";
-import { upper, dateDiff } from "../utils/helpers";
+import { getArticles } from "../utils/api";
+import { dateDiff } from "../utils/helpers";
 import LoadingSpinner from "./Spinner";
 import ErrorPage from "./ErrorPage";
 import ArticleModal from "./ArticleModal";
+import SingleArticle from "./SingleArticle";
+import FilterBar from "./FilterBar";
 
 export default function ArticleList(){
 
-    const {topic_slug} = useParams(); 
+    const {topic_slug} = useParams();
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [page, setPage] = useState(1);
+    const [filters, setFilters] = useState([]);
 
-    const [show, setShow] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const [article, setArticle] = useState({});
 
     const handleShow = (event, article) => {
         setArticle(article);
-        setShow(true);
+        setShowModal(true);
     };
 
     useEffect(()=> {
-        setLoading(true);
-        getArticles().then((res)=> {
-            setArticles(res.articles);
-            setLoading(false);
-            setError(false);
-        }).catch((err)=> {
-            setLoading(false);
-            setError(true);
+        setFilters((old)=> {
+            if (!old.includes(topic_slug) && topic_slug !== undefined){
+                old.push(topic_slug)
+            } 
+            return old;
         })
-    }, [])
-
-    useEffect(()=> {
         setLoading(true)
-        getArticlesByTopicSlug(topic_slug)
-        .then((res) =>{
-            setArticles(res.articles);
+        getArticles(topic_slug)
+        .then(({articles})=> {
+            setArticles(articles);
             setLoading(false);
             setError(false);
         }).catch((err)=> {
@@ -53,23 +49,16 @@ export default function ArticleList(){
     if (loading) return <LoadingSpinner loadingType="Articles"/>;
     if (error) return <ErrorPage />
 
+    const listStyle = (filters.length === 0) ? {paddingTop: '0px'} : {paddingTop: '50px'};
+
     return (
         <Container>
-
-        {topic_slug ? 
+            <FilterBar filters={filters} setFilters={setFilters}/>
         <Container>
-            <h3>
-            {"Filters: "}
-        <Badge>
-            {upper(topic_slug)} 
-        </Badge>
-            </h3>
-        </Container>
-        : <></>
-        }
-        <Container>
-        <ArticleModal show={show} setShow={setShow} article={article}/>
-        <Row xs={1} md={2} lg={3} className="g-4">
+        <ArticleModal show={showModal} setShow={setShowModal}>
+            <SingleArticle sentArticle={article}/>
+        </ArticleModal>
+        <Row xs={1} md={2} lg={3} className="g-4" style={listStyle}>
             {articles.map((article)=> {
                 return (
                     <Col key={article.article_id}>
@@ -86,16 +75,17 @@ export default function ArticleList(){
                         </Card.Body>
                         <Card.Footer>
                             <small className="text-muted">{article.topic}</small>
-
-
                         </Card.Footer>
                     </Card>
                     </Col>
                 )
-                
             })}
         </Row>
+        <Row>
+
+        </Row>
         </Container>
+        {/* <BottomBar filters={[topic_slug]} displaying={pageData}></BottomBar> */}
         </Container>
     )
 
