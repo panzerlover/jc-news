@@ -11,7 +11,6 @@ export default function TopicList(){
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [page, setPage] = useState(1);
     const [topics, setTopics] = useState([]);
 
     useEffect(()=> {

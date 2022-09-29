@@ -5,9 +5,7 @@ import { getTopics } from '../utils/api';
 import { upper } from '../utils/helpers';
 
 export default function HeaderBar(){
-
     const [topics, setTopics] = useState([])
-
     useEffect(()=> {
         getTopics()
         .then((res)=> {
@@ -16,7 +14,7 @@ export default function HeaderBar(){
     }, []);
 
 return (
-    <Navbar bg="light" variant="light" fixed="top">
+    <Navbar bg="light" variant="light" fixed="top" style={{zIndex: '100'}}>
         <Container>
         <Navbar.Brand href="/">JC News</Navbar.Brand>
         <Nav className="me-auto">

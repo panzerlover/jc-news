@@ -1,9 +1,7 @@
-import { Badge, Button } from 'react-bootstrap'
+import { Button, Container } from 'react-bootstrap'
 import Modal from 'react-bootstrap/Modal'
 
-import { dateDiff } from '../utils/helpers';
-
-export default function ArticleModal({show, setShow, article}){
+export default function ArticleModal({show, setShow, children}){
 
     const handleClose = () => {
         setShow(false)
@@ -11,28 +9,14 @@ export default function ArticleModal({show, setShow, article}){
 
     return (
         <Modal show={show} onHide={handleClose}>
-                            <Modal.Header closeButton>
-                            <Modal.Title>{article.title}</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Header>
-                                <small className="text-muted">author: {article.author} </small>
-                                <small className="text-muted"> {dateDiff(article.created_at)} </small>
-                                <small className="text-muted"> votes: {article.votes} </small>
-                                <small className="text-muted"> {article.topic}</small>
-                            </Modal.Header>
-                            <Modal.Body>{article.body}
-                            <Button variant="link" href={`/article/${article.article_id}`}>View As Page</Button>
-                            </Modal.Body>
-                            <Modal.Footer>
-                            <Button variant="primary" >
-                                View Comments {<Badge bg="primary" pill>{article.comment_count}</Badge>}
-                            </Button>
-                            <Button variant="secondary" onClick={handleClose}>
-                                Close
-                            </Button>
-                            </Modal.Footer>
-                         </Modal>
+            <Container>
+                {children}
+            </Container>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
     )
-
-
 }
