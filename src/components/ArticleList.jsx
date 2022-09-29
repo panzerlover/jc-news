@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {Container , Row, Col} from 'react-bootstrap'
+import {Container , Row, Col, Navbar} from 'react-bootstrap'
 
 import { getArticles, getArticlesWithParams } from "../utils/api";
 import ErrorPage from "./ErrorPage";
 import LoadingSpinner from "./Spinner";
-import FilterBars from "./FilterBars";
+import FilterBar from "./FilterBar";
 import SingleArticle from "./SingleArticle";
 import ArticleModal from "./ArticleModal";
 import SmallArticleCard from "./SmallArticleCard";
+import PageBar from "./PageBar";
 
 export default function ArticleList(){
 
@@ -17,6 +18,9 @@ export default function ArticleList(){
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [totalCount, setTotalCount] = useState(0);
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
 
     const [showModal, setShowModal] = useState(false);
     const [article, setArticle] = useState({});
@@ -29,16 +33,21 @@ export default function ArticleList(){
     useEffect(()=> {
         setLoading(true)
         getArticles().then((res) => {
+            setTotalCount(res.total_count)
             setArticles(res.articles);
             setLoading(false);
         } 
-        )
+        ).catch((err)=> {
+            setLoading(false);
+            setError(true);
+        })
     }, [])
 
     useEffect(()=> {
         setLoading(true)
         getArticlesWithParams({topic: topic_slug})
-        .then(({articles})=> {
+        .then(({articles, total_count})=> {
+            setTotalCount(total_count);
             setArticles(articles);
             setLoading(false);
             setError(false);
@@ -57,7 +66,7 @@ export default function ArticleList(){
     return (
 
     <Container>
-            <FilterBars />
+        <FilterBar />
         <Container>
         <ArticleModal show={showModal} setShow={setShowModal}>
             <SingleArticle sentArticle={article}/>
@@ -71,6 +80,13 @@ export default function ArticleList(){
                 )
             })}
         </Row>
+        </Container>
+        <Container fluid>
+
+        <Navbar bg='light' variant='light' fixed="bottom" style={{zIndex: '50'}}>
+
+        <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit}/>
+        </Navbar>
         </Container>
     </Container>
 )

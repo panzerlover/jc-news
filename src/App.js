@@ -11,8 +11,6 @@ import { useState } from 'react';
 function App() {
 
   const [filters, setFilters] = useState({
-    p: 1,
-    limit: 10,
     sort_by: "votes",
     order: "asc"
   })
@@ -21,7 +19,7 @@ function App() {
     <UserContext.Provider value={{username: "grumpy19"}}>
       <BrowserRouter>
       <div className="App">
-        <HeaderBar filters={filters} setFilters={setFilters}/>
+        <HeaderBar />
         <Routes>
           <Route path="/" element={<HomePage />}/>
           <Route path="/articles" element={<ArticleList/>}/>

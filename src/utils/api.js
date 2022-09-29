@@ -12,8 +12,8 @@ export const getArticlesWithParams = (params) => {
     return api.get('/articles', params).then(res => res.data);
 }
 
-export const getArticleComments = (id) => {
-    return api.get(`/articles/${id}/comments`).then(res => res.data);
+export const getArticleComments = (id, params) => {
+    return api.get(`/articles/${id}/comments`, params).then(res => res.data);
 }
 
 export const getSingleArticle = (id) => {
