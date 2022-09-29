@@ -64,7 +64,7 @@ export default function ArticleList(){
             {articles.map((article)=> {
                 return (
                     <Col key={article.article_id}>
-                    <Card onClick={(event) => handleShow(event, article)}>
+                    <Card>
                         <Card.Body>
                             <Card.Title>
                                 {article.title}
@@ -79,6 +79,7 @@ export default function ArticleList(){
                             </Card.Text>
                         </Card.Body>
                         <Button variant="link" onClick={(event) => handleShow(event, article)}>Read Full Article</Button>
+                            <Button type="primary" onClick={(event) => handleShow(event, article)}>Read</Button>
                         <Card.Footer>
                             <Row>
                             <Col>
