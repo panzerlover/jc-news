@@ -21,6 +21,16 @@ export const voteOnArticle = (id, vote) => {
     .then(res => res.data);
 }
 
+export const commentOnArticle = (id, body) => {
+    return api.post(`/articles/${id}/comments`, body)
+    .then(res => res.data);
+}
+
+export const voteOnComment = (id, vote) => {
+    return api.patch(`/comments/${id}`, {inc_votes: vote})
+    .then(res=> res.data);
+}
+
 export const getTopics = () => {
     return api.get('topics').then((res)=> res.data);
 }

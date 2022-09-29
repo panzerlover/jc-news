@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Navbar, Nav, Container, NavDropdown} from 'react-bootstrap';
+import { UserContext } from '../contexts/UserContext';
 
 import { getTopics } from '../utils/api';
 import { upper } from '../utils/helpers';
 
 export default function HeaderBar(){
+
+    const user = useContext(UserContext);
     const [topics, setTopics] = useState([])
     useEffect(()=> {
         getTopics()
@@ -26,7 +29,7 @@ return (
                     return <NavDropdown.Item key={topic.slug} href={`/articles/${topic.slug}`}>{upper(topic.slug)}</NavDropdown.Item>
                 })}
             </NavDropdown>
-            <Nav.Link href="/profile">Profile</Nav.Link>
+            <Nav.Link href="/profile">{user.username}</Nav.Link>
         </Nav>
         </Container>
     </Navbar>
