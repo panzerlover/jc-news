@@ -1,24 +1,22 @@
-import { useEffect, useState, useContext } from "react";
-import { Row, Col, Card, Container, Button } from "react-bootstrap";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import {Container , Row, Col} from 'react-bootstrap'
 
-import { UserContext } from "../contexts/UserContext";
-import { getArticles } from "../utils/api";
-import { dateDiff } from "../utils/helpers";
-import LoadingSpinner from "./Spinner";
+import { getArticles, getArticlesWithParams } from "../utils/api";
 import ErrorPage from "./ErrorPage";
-import ArticleModal from "./ArticleModal";
+import LoadingSpinner from "./Spinner";
+import FilterBars from "./FilterBars";
 import SingleArticle from "./SingleArticle";
-import FilterBar from "./FilterBar";
+import ArticleModal from "./ArticleModal";
+import SmallArticleCard from "./SmallArticleCard";
 
 export default function ArticleList(){
 
-    const user = useContext(UserContext)
     const {topic_slug} = useParams();
+    // const [searchParams, setSearchParams]= useSearchParams();
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [filters, setFilters] = useState([]);
 
     const [showModal, setShowModal] = useState(false);
     const [article, setArticle] = useState({});
@@ -29,14 +27,17 @@ export default function ArticleList(){
     };
 
     useEffect(()=> {
-        setFilters((old)=> {
-            if (!old.includes(topic_slug) && topic_slug !== undefined){
-                old.push(topic_slug)
-            } 
-            return old;
-        })
         setLoading(true)
-        getArticles(topic_slug)
+        getArticles().then((res) => {
+            setArticles(res.articles);
+            setLoading(false);
+        } 
+        )
+    }, [])
+
+    useEffect(()=> {
+        setLoading(true)
+        getArticlesWithParams({topic: topic_slug})
         .then(({articles})=> {
             setArticles(articles);
             setLoading(false);
@@ -51,11 +52,12 @@ export default function ArticleList(){
     if (loading) return <LoadingSpinner loadingType="Articles"/>;
     if (error) return <ErrorPage />
 
-    const listStyle = (filters.length === 0) ? {paddingTop: '0px'} : {paddingTop: '50px'};
+    const listStyle = (topic_slug === undefined) ? {paddingTop: '0px'} : {paddingTop: '50px'};
 
     return (
-        <Container>
-            <FilterBar filters={filters} setFilters={setFilters}/>
+
+    <Container>
+            <FilterBars />
         <Container>
         <ArticleModal show={showModal} setShow={setShowModal}>
             <SingleArticle sentArticle={article}/>
@@ -64,45 +66,13 @@ export default function ArticleList(){
             {articles.map((article)=> {
                 return (
                     <Col key={article.article_id}>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>
-                                {article.title}
-                            </Card.Title>
-                            <Card.Subtitle>
-                            <small href={`/articles/${article.topic}`}>#{article.topic}</small>
-                            </Card.Subtitle>
-                            <Card.Text>
-                                <small className="text-muted">
-                                {article.body.substring(0, 70)}...
-                                </small>
-                            </Card.Text>
-                        </Card.Body>
-                        <Button variant="link" onClick={(event) => handleShow(event, article)}>Read Full Article</Button>
-                        <Card.Footer>
-                            <Row>
-                            <Col>
-                            <small className="text-muted">{(article.author === user.username) ? "you" : article.author}</small>
-                            </Col>
-                            <Col>
-                            <small className="text-muted">{dateDiff(article.created_at)} </small>
-                            </Col>
-                            <Col>
-                            <small className="text-muted">&#8593;&#8595; {article.votes} </small>
-                            </Col>
-                            </Row>
-                        </Card.Footer>
-                    </Card>
+                        <SmallArticleCard article={article} handleShow={handleShow}/>
                     </Col>
                 )
             })}
         </Row>
-        <Row>
-
-        </Row>
         </Container>
-        {/* <BottomBar filters={[topic_slug]} displaying={pageData}></BottomBar> */}
-        </Container>
-    )
+    </Container>
+)
 
 }
