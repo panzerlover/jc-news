@@ -1,34 +1,10 @@
-import { useState, useEffect, useContext } from 'react';
-import { useRouteError, useSearchParams } from 'react-router-dom';
-import { Navbar, Nav, Container, Offcanvas, Form, Button} from 'react-bootstrap';
+import { useContext } from 'react';
+import { Navbar, Nav, Container} from 'react-bootstrap';
 import { UserContext } from '../contexts/UserContext';
-
-import { getTopics } from '../utils/api';
-import { upper } from '../utils/helpers';
 
 export default function HeaderBar(){
 
     const user = useContext(UserContext);
-    const [topics, setTopics] = useState([])
-    useEffect(()=> {
-        getTopics()
-        .then((res)=> {
-            setTopics(res.topics);
-        })
-    }, []);
-
-    const handleChange = (event, type) => {
-        setFilters((old)=> {
-            const newFilter = {...old};
-            newFilter[type] = event.target.value;
-            return newFilter;
-        })
-    }
-
-    const handleSubmit = (event)=> {
-        event.preventDefault();
-        setSearchParams(filters)
-    }
 
 return (
     
