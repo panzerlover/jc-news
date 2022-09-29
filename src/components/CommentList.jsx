@@ -39,6 +39,9 @@ export default function CommentList({show, article_id}){
                         <Card.Text className="comment-text">
                         {comment.body}
                         </Card.Text>
+                        <Card.Subtitle>
+                        {comment.author}
+                        </Card.Subtitle>
                         <Card.Footer style={{padding: '0px'}}>
                         <VoteBar votes={comment.votes}/>
                         </Card.Footer>
