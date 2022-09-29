@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Row, Col, Card, Container } from "react-bootstrap";
+import { Row, Col, Card, Container, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 import { getArticles } from "../utils/api";
@@ -62,7 +62,7 @@ export default function ArticleList(){
             {articles.map((article)=> {
                 return (
                     <Col key={article.article_id}>
-                    <Card onClick={(event) => handleShow(event, article)}>
+                    <Card>
                         <Card.Body>
                             <Card.Title>
                                 {article.title}
@@ -73,6 +73,7 @@ export default function ArticleList(){
                             <small className="text-muted">votes: {article.votes} </small>
                             </Card.Text>
                         </Card.Body>
+                            <Button type="primary" onClick={(event) => handleShow(event, article)}>Read</Button>
                         <Card.Footer>
                             <small className="text-muted">{article.topic}</small>
                         </Card.Footer>

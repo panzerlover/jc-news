@@ -4,12 +4,12 @@ const api = axios.create({
     baseURL: 'https://joseph-craven-newsapp.herokuapp.com/api/'
 });
 
-// export const getArticles= () => {
-//     return api.get('articles').then((res)=>  res.data);
-// };
-
 export const getArticles = (slug) => {
     return api.get('/articles', {params: {topic: slug}}).then(res => res.data);
+}
+
+export const getArticleComments = (id) => {
+    return api.get(`/articles/${id}/comments`).then(res => res.data);
 }
 
 export const getSingleArticle = (id) => {

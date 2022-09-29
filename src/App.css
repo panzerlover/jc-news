@@ -7,7 +7,39 @@ body {
   padding-bottom: 70px;
 }
 
+.article-wrapper{
+  overflow-y: hidden;
+}
+
+.wrapper{
+  max-height: 600px;
+  overflow: scroll;
+}
+
+.article{
+  padding: 0 0.2rem;
+}
+
+.header{
+  padding-top: 1.5rem;
+}
+
+.body{
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+
 .float{
   position: fixed;
   top: 70px;
+}
+.comment-text{
+  padding: 0.5rem 0.2rem;
+  margin-bottom: 0px;
+  text-align: left;
+}
+
+.comment-vote{
+  margin: 0 0 0 0;
+  padding: 0px 0px;
 }

@@ -14,7 +14,7 @@ export default function VoteBar({votes, castVote}){
     }
 
     return (
-        <Row style={{padding: '0.5rem'}}>
+        <Row>
         <Col className="m-auto" style={{textAlign: 'right'}}>
         Votes: {votes + vote}
         </Col>
