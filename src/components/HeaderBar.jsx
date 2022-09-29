@@ -13,13 +13,13 @@ return (
 
         <Navbar.Brand href="/">JC News</Navbar.Brand>
             <Nav>
-        <Navbar.Text >
-            <small style={{textDecoration: 'underline'}}>
-                {user.username}
-                </small>
-        </Navbar.Text>
-        <Nav.Link href="/articles">Articles</Nav.Link>
-        <Nav.Link href="/topics">Topics</Nav.Link>
+                <Navbar.Text >
+                    <small style={{textDecoration: 'underline'}}>
+                        {user.username}
+                    </small>
+                </Navbar.Text>
+                <Nav.Link href="/articles">Articles</Nav.Link>
+                <Nav.Link href="/topics">Topics</Nav.Link>
             </Nav>
         </Container>
         </Navbar>
