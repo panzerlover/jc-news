@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import {Container , Row, Col, Navbar} from 'react-bootstrap'
 
-import { UserContext } from "../contexts/UserContext";
-import { getArticles } from "../utils/api";
-import { dateDiff } from "../utils/helpers";
-import LoadingSpinner from "./Spinner";
+import { getArticles, getArticlesWithParams } from "../utils/api";
 import ErrorPage from "./ErrorPage";
-import ArticleModal from "./ArticleModal";
-import SingleArticle from "./SingleArticle";
+import LoadingSpinner from "./Spinner";
 import FilterBar from "./FilterBar";
+import SingleArticle from "./SingleArticle";
+import ArticleModal from "./ArticleModal";
+import SmallArticleCard from "./SmallArticleCard";
+import PageBar from "./PageBar";
 
 export default function ArticleList(){
     const {topic_slug} = useParams();
@@ -80,9 +80,9 @@ export default function ArticleList(){
     if (error) return <ErrorPage />
 
     return (
-<>
-        <FilterBar />
+
     <Container>
+        <FilterBar />
         <Container>
         <ArticleModal show={showModal} setShow={setShowModal}>
             <SingleArticle sentArticle={article}/>
@@ -91,45 +91,20 @@ export default function ArticleList(){
             {articles.map((article)=> {
                 return (
                     <Col key={article.article_id}>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>
-                                {article.title}
-                            </Card.Title>
-                            <Card.Subtitle>
-                            <small href={`/articles/${article.topic}`}>#{article.topic}</small>
-                            </Card.Subtitle>
-                            <Card.Text>
-                                <small className="text-muted">
-                                {article.body.substring(0, 70)}...
-                                </small>
-                            </Card.Text>
-                        </Card.Body>
-                        <Button variant="link" onClick={(event) => handleShow(event, article)}>Read Full Article</Button>
-                        <Card.Footer>
-                            <Row>
-                            <Col>
-                            <small className="text-muted">{(article.author === user.username) ? "you" : article.author}</small>
-                            </Col>
-                            <Col>
-                            <small className="text-muted">{dateDiff(article.created_at)} </small>
-                            </Col>
-                            <Col>
-                            <small className="text-muted">&#8593;&#8595; {article.votes} </small>
-                            </Col>
-                            </Row>
-                        </Card.Footer>
-                    </Card>
+                        <SmallArticleCard article={article} handleShow={handleShow}/>
                     </Col>
                 )
             })}
         </Row>
-        <Row>
+        </Container>
+        <Container fluid>
 
-        </Row>
+        <Navbar bg='light' variant='light' fixed="bottom" style={{zIndex: '50'}}>
+
+        <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit}/>
+        </Navbar>
         </Container>
     </Container>
-        </>
 )
 
 }

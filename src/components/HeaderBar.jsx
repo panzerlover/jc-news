@@ -1,13 +1,16 @@
 import { useState, useEffect, useContext } from 'react';
-import { Navbar, Nav, Container, NavDropdown} from 'react-bootstrap';
+import { useRouteError, useSearchParams } from 'react-router-dom';
+import { Navbar, Nav, Container, Offcanvas, Form, Button} from 'react-bootstrap';
 import { UserContext } from '../contexts/UserContext';
 
 import { getTopics } from '../utils/api';
 import { upper } from '../utils/helpers';
 
-export default function HeaderBar(){
+export default function HeaderBar({filters, setFilters}){
 
     const user = useContext(UserContext);
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [topics, setTopics] = useState([])
     useEffect(()=> {
         getTopics()
@@ -16,22 +19,35 @@ export default function HeaderBar(){
         })
     }, []);
 
+    const handleChange = (event, type) => {
+        setFilters((old)=> {
+            const newFilter = {...old};
+            newFilter[type] = event.target.value;
+            return newFilter;
+        })
+    }
+
+    const handleSubmit = (event)=> {
+        event.preventDefault();
+        setSearchParams(filters)
+    }
+
 return (
-    <Navbar bg="light" variant="light" fixed="top" style={{zIndex: '100'}}>
+    
+        <Navbar bg="light" variant="light" fixed="top" style={{zIndex: '100'}}>
         <Container>
+
         <Navbar.Brand href="/">JC News</Navbar.Brand>
-        <Nav className="me-auto">
-            <Nav.Link href="/">Articles</Nav.Link>
-            <NavDropdown title="Topics" id="topic-dropdown">
-                <NavDropdown.Item href="/topics">View All</NavDropdown.Item>
-                <NavDropdown.Divider />
-                {topics.map((topic)=> {
-                    return <NavDropdown.Item key={topic.slug} href={`/articles/${topic.slug}`}>{upper(topic.slug)}</NavDropdown.Item>
-                })}
-            </NavDropdown>
-            <Nav.Link href="/profile">{user.username}</Nav.Link>
-        </Nav>
+            <Nav>
+        <Navbar.Text >
+            <small style={{textDecoration: 'underline'}}>
+                {user.username}
+                </small>
+        </Navbar.Text>
+        <Nav.Link href="/articles">Articles</Nav.Link>
+        <Nav.Link href="/topics">Topics</Nav.Link>
+            </Nav>
         </Container>
-    </Navbar>
-    )
+        </Navbar>
+    );
 }

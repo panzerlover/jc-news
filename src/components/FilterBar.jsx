@@ -6,7 +6,7 @@ import { upper } from "../utils/helpers";
 import ErrorPage from "./ErrorPage";
 import LoadingSpinner from "./Spinner";
 
-export default function FilterBar ({filters, setFilters}) {
+export default function FilterBar () {
 
     const {topic_slug} = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
