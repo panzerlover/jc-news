@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { Row, Col, Card, Container } from "react-bootstrap";
+import { Row, Col, Card, Container, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 import { UserContext } from "../contexts/UserContext";
@@ -78,6 +78,7 @@ export default function ArticleList(){
                                 </small>
                             </Card.Text>
                         </Card.Body>
+                        <Button variant="link" onClick={(event) => handleShow(event, article)}>Read Full Article</Button>
                         <Card.Footer>
                             <Row>
                             <Col>
