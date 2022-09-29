@@ -8,7 +8,6 @@ import TopicList from './components/TopicList';
 
 function App() {
 
-
   return (
     <UserContext.Provider value={{username: "grumpy19"}}>
       <BrowserRouter>
