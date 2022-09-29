@@ -8,6 +8,7 @@ import LoadingSpinner from "./Spinner";
 import ErrorPage from "./ErrorPage";
 import VoteBar from "./VoteBar";
 import CommentList from "./CommentList";
+import CommentForm from "./CommentForm";
 
 export default function SingleArticle({sentArticle}) {
 
@@ -16,8 +17,10 @@ export default function SingleArticle({sentArticle}) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [article, setArticle] = useState({});
-    const [vote, castVote] = useState(0);
+    const [vote, castVote] = useState({inc_votes: 0, voteId: article.article_id});
+    const [comments, setComments] = useState([])
     const [showComments, setShowComments] = useState(false);
+    const [makingComment, setMakingComment] = useState(false);
 
     useEffect(()=> {
         if (!sentArticle){
@@ -36,28 +39,34 @@ export default function SingleArticle({sentArticle}) {
     }, [article_id, sentArticle])
 
     useEffect(()=> {
-        if (vote !== 0){
-            voteOnArticle(article.article_id, vote)
+        if (vote.inc_votes !== 0){
+            voteOnArticle(vote.voteId, vote.inc_votes)
             .catch((error)=> {
                 setError(true);
-                voteOnArticle(article.article_id, -vote);
+                voteOnArticle(vote.voteId, -vote.inc_votes);
             })
         }
-    }, [vote, castVote, article.article_id])
+    }, [vote, castVote])
 
     const commentClick = () => {
         setShowComments((old)=> {
+            if (old === true){
+                setMakingComment(false);
+            }
             return !old;
         })
     }
 
+    const makeCommentClick = () => {
+        setMakingComment((old)=> {
+            return !old;
+        })
+    }
     if (loading) return <LoadingSpinner loadingType="Article"/>;
     if (error) return <ErrorPage />;
 
     return (
             <Container className="article-wrapper">
-                <Container className="article">
-
                 <Row className="article header">
                     <h1>
                     {article.title}
@@ -81,16 +90,20 @@ export default function SingleArticle({sentArticle}) {
                     <Button variant="link" href={`/article/${article.article_id}`}>View As Page</Button>
                     : <></>}
                 <Row>
-                <VoteBar votes={article.votes} castVote={castVote}/>
+                <VoteBar votes={article.votes} castVote={castVote} voteId={article.article_id}/>
                 </Row>
                 <Button variant="primary" onClick={commentClick}>
                     {showComments ? 'Hide Comments' : 'Show Comments'}
-                    {<Badge bg="primary" pill>{article.comment_count}</Badge>}
+                    {showComments ? <></> : <Badge bg="primary" pill>{article.comment_count}</Badge>}
                 </Button>
-                </Container>
-                <Container>
-                <CommentList show={showComments} article_id={article.article_id}/>
-                </Container>
+                {showComments ? 
+                    <Button variant="primary" onClick={makeCommentClick}>
+                        {makingComment ? 'Cancel' : 'Leave Comment'}
+                    </Button>
+                : <></>
+                }
+                <CommentForm show={makingComment} article_id={article.article_id} setComments={setComments}/>
+                <CommentList show={showComments} article_id={article.article_id} comments={comments} setComments={setComments}/>
             </Container>
     )
 

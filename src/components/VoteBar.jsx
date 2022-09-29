@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ButtonGroup, Button, Row, Col } from "react-bootstrap";
 
-export default function VoteBar({votes, castVote}){
+export default function VoteBar({votes, castVote, voteId}){
 
     const [vote, setVote] = useState(0); 
 
@@ -10,7 +10,7 @@ export default function VoteBar({votes, castVote}){
         setVote(() =>{
             return voteAsNum;
         })
-        castVote(voteAsNum);
+        castVote({inc_votes: voteAsNum, voteId: voteId});
     }
 
     return (
