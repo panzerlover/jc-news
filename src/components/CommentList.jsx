@@ -16,7 +16,6 @@ export default function CommentList({show, article_id, comments, setComments}){
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
 
-
     useEffect(()=> {
         setLoading(true);
         if (article_id !== undefined){
@@ -47,23 +46,6 @@ export default function CommentList({show, article_id, comments, setComments}){
 
     return (
         <Container>
-            {comments.map((comment)=> {
-                return (
-                    <Row key={comment.comment_id} style={{padding: "0.2rem 0rem"}}>
-                        <Card>
-                        <Card.Text className="comment-text">
-                        {comment.body}
-                        </Card.Text>
-                        <Card.Subtitle>
-                        {comment.author}
-                        </Card.Subtitle>
-                        <Card.Footer style={{padding: '0px'}}>
-                        <VoteBar votes={comment.votes} castVote={castVote} voteId={comment.comment_id}/>
-                        </Card.Footer>
-                        </Card>
-                </Row> 
-                )
-            })}
             <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit}/>
         </Container>
     )

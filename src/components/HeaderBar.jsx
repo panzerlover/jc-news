@@ -6,11 +6,9 @@ import { UserContext } from '../contexts/UserContext';
 import { getTopics } from '../utils/api';
 import { upper } from '../utils/helpers';
 
-export default function HeaderBar({filters, setFilters}){
+export default function HeaderBar(){
 
     const user = useContext(UserContext);
-    const [searchParams, setSearchParams] = useSearchParams();
-
     const [topics, setTopics] = useState([])
     useEffect(()=> {
         getTopics()
