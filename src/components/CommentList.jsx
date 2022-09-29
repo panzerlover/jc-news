@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, Container, Row} from "react-bootstrap";
 import { getArticleComments, voteOnComment } from "../utils/api";
 import ErrorPage from "./ErrorPage";
+import PageBar from "./PageBar";
 import LoadingSpinner from "./Spinner";
 import VoteBar from "./VoteBar";
 
@@ -11,11 +12,15 @@ export default function CommentList({show, article_id, comments, setComments}){
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [vote, castVote] = useState({inc_votes: 0, voteId: null});
+    const [totalCount, setTotalCount] = useState(0);
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
 
     useEffect(()=> {
         setLoading(true);
         if (article_id !== undefined){
-            getArticleComments(article_id).then(({comments})=> {
+            getArticleComments(article_id, {params: {page: page, limit: limit}}).then(({comments, total_count})=> {
+                setTotalCount(total_count);
                 setComments(comments);
                 setLoading(false);
             }).catch((err)=> {
@@ -23,7 +28,7 @@ export default function CommentList({show, article_id, comments, setComments}){
                 setError(true);
             })
         }
-    },[article_id, show, setComments])
+    },[article_id, show, setComments, page, limit])
 
     useEffect(()=> {
         if (vote.inc_votes !== 0 && vote.voteId !== undefined){
@@ -41,24 +46,7 @@ export default function CommentList({show, article_id, comments, setComments}){
 
     return (
         <Container>
-            
-            {comments.map((comment)=> {
-                return (
-                    <Row key={comment.comment_id} style={{padding: "0.2rem 0rem"}}>
-                        <Card>
-                        <Card.Text className="comment-text">
-                        {comment.body}
-                        </Card.Text>
-                        <Card.Subtitle>
-                        {comment.author}
-                        </Card.Subtitle>
-                        <Card.Footer style={{padding: '0px'}}>
-                        <VoteBar votes={comment.votes} castVote={castVote} voteId={comment.comment_id}/>
-                        </Card.Footer>
-                        </Card>
-                </Row> 
-                )
-            })}
+            <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit}/>
         </Container>
     )
 }
