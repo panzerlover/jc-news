@@ -1,9 +1,27 @@
 import { useEffect, useState } from "react";
 import { ButtonGroup, Button, Dropdown, Row, Col } from "react-bootstrap";
+import { useSearchParams } from "react-router-dom";
 
-export default function PageBar({page, setPage, total_count, limit=10, setLimit}){
+export default function PageBar({page, setPage, total_count, limit=10, setLimit, setError}){
 
+    const [ searchParams, setSearchParams] = useSearchParams();
     const [pages, setPages] = useState([]);
+
+    useEffect(()=> {
+        let newPage = searchParams.get("page");
+        let newLimit = searchParams.get("limit");
+        if (null !== newPage){
+            let limitCheck = (newLimit) ? newLimit : limit;
+            if (newPage > Math.ceil(total_count / limitCheck)){
+                setError(`page ${newPage} does not exist`)
+            } else {
+                setPage(newPage)
+            }
+        }
+        if (null !== newLimit && !isNaN(newLimit)){
+            setLimit(newLimit)
+        }
+    }, [searchParams, setError, limit, setLimit, setPage, total_count])    
 
    useEffect(() => {
     setPages(()=> {
@@ -17,12 +35,16 @@ export default function PageBar({page, setPage, total_count, limit=10, setLimit}
    },[limit, total_count])
 
     const handleClick= (e)=> {
-        console.log(page);
+        setSearchParams({page: e.target.value})
         setPage(e.target.value);
     }
 
     const handleLimit=(e, num)=> {
         setLimit(num);
+        if (num * page > total_count){
+            setSearchParams({page: 1, limit: num});
+            setPage(1);
+        }
     }
 
     return (

@@ -65,16 +65,16 @@ export default function ArticleList(){
                 setArticles(articles);
             }
             setLoading(false);
-            setError(false);
+            setError(null);
         }).catch((err)=> {
             setLoading(false);
-            setError(true);
+            setError(err.code);
         })
 
     }, [topic_slug, limit, setLimit, page, setPage, searchParams, setSearchParams])
 
     if (loading) return <LoadingSpinner loadingType="Articles"/>;
-    if (error) return <ErrorPage />
+    if (error) return <ErrorPage error={error}/>
 
     return (
 
@@ -96,7 +96,7 @@ export default function ArticleList(){
         </Container>
         <Container fluid>
             <Navbar bg='light' variant='light' fixed="bottom" style={{zIndex: '50'}}>
-                <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit}/>
+                <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit} setError={setError}/>
             </Navbar>
         </Container>
     </Container>

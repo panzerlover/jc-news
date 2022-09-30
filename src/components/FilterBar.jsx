@@ -61,15 +61,15 @@ export default function FilterBar () {
         <Container>
             <Navbar bg="light" fixed="top" style={{top : "50px"}} className="justify-content-center">
             <Row sm={3}>
-                <Col key="topicDropDown">
-                <DropdownButton size="sm" title="Topic">
+                <Col key="topicCol">
+                <DropdownButton key="topicDropdown"size="sm" title="Topic">
                         {topics.map((topic)=> 
                            topic.slug === topic_slug ?
-                           <Dropdown.Item key={topic.slug} href={`/articles/${topic.slug}`} style={{textDecoration: 'underline'}}>
+                           <Dropdown.Item key={topic_slug} href={`/articles/${topic.slug}`} style={{textDecoration: 'underline'}}>
                            {topic.slug}
                             </Dropdown.Item>
                            :
-                            <Dropdown.Item key={topic_slug} href={`/articles/${topic.slug}`}>
+                            <Dropdown.Item key={topic.slug} href={`/articles/${topic.slug}`}>
                                 {topic.slug}
                             </Dropdown.Item>
                         )}
@@ -77,18 +77,18 @@ export default function FilterBar () {
                 </Col>
                 {filterVals.map((obj)=> {
                     return (
-                        <Col key={obj.label + "dropdown"}>
-                        <DropdownButton size="sm" title={obj.label}>
+                        <Col key={obj.label + "column"}>
+                        <DropdownButton key={obj.label + "Dropdown"} size="sm" title={obj.label}>
                                     {obj.options.map((o)=> 
                                     searchParams.get(obj.value) === o[1] ? 
-                                    <Dropdown.Item key={obj.value}
+                                    <Dropdown.Item key={o[1]}
                                     onClick={(e)=> handleClick(e, obj.value, o[1])}
                                     style={{textDecoration: 'underline'}}
                                     >
                                     {o[0]}
                                     </Dropdown.Item>
                                     :
-                                    <Dropdown.Item key={obj.value}
+                                    <Dropdown.Item key={o[1]}
                                     onClick={(e)=> handleClick(e, obj.value, o[1])}>{o[0]}</Dropdown.Item>
                                     )}
                         </DropdownButton>
