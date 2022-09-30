@@ -35,6 +35,11 @@ export const voteOnComment = (id, vote) => {
     .then(res=> res.data);
 }
 
+export const deleteComment = (id) => {
+    return api.delete(`/comments/${id}`).then(()=> "delete successful");
+
+}
+
 export const getTopics = () => {
     return api.get('topics').then((res)=> res.data);
 }

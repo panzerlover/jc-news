@@ -6,7 +6,6 @@ import HomePage from './components/HomePage';
 import SingleArticle from './components/SingleArticle';
 import HeaderBar from './components/HeaderBar';
 import TopicList from './components/TopicList';
-import { useState } from 'react';
 
 function App() {
 

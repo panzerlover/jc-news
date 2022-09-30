@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Container, Col, Navbar, Row, DropdownButton, Dropdown } from "react-bootstrap";
 import { useParams, useSearchParams } from "react-router-dom";
 import { getTopics } from "../utils/api";
-import { upper } from "../utils/helpers";
 import ErrorPage from "./ErrorPage";
 import LoadingSpinner from "./Spinner";
 
@@ -13,6 +12,7 @@ export default function FilterBar () {
     const [topics, setTopics] = useState([]);
     const [loading,setLoading] = useState(false);
     const [error, setError] = useState(false);
+
     useEffect(()=> {
         setLoading(true);
         getTopics().then(
@@ -61,15 +61,15 @@ export default function FilterBar () {
         <Container>
             <Navbar bg="light" fixed="top" style={{top : "50px"}} className="justify-content-center">
             <Row sm={3}>
-                <Col>
+                <Col key="topicDropDown">
                 <DropdownButton size="sm" title="Topic">
                         {topics.map((topic)=> 
                            topic.slug === topic_slug ?
-                           <Dropdown.Item href={`/articles/${topic.slug}`} style={{textDecoration: 'underline'}}>
+                           <Dropdown.Item key={topic.slug} href={`/articles/${topic.slug}`} style={{textDecoration: 'underline'}}>
                            {topic.slug}
-                       </Dropdown.Item>
+                            </Dropdown.Item>
                            :
-                            <Dropdown.Item href={`/articles/${topic.slug}`}>
+                            <Dropdown.Item key={topic_slug} href={`/articles/${topic.slug}`}>
                                 {topic.slug}
                             </Dropdown.Item>
                         )}
@@ -77,25 +77,24 @@ export default function FilterBar () {
                 </Col>
                 {filterVals.map((obj)=> {
                     return (
-                        <Col>
+                        <Col key={obj.label + "dropdown"}>
                         <DropdownButton size="sm" title={obj.label}>
                                     {obj.options.map((o)=> 
                                     searchParams.get(obj.value) === o[1] ? 
-                                    <Dropdown.Item 
+                                    <Dropdown.Item key={obj.value}
                                     onClick={(e)=> handleClick(e, obj.value, o[1])}
                                     style={{textDecoration: 'underline'}}
                                     >
                                     {o[0]}
                                     </Dropdown.Item>
                                     :
-                                    <Dropdown.Item 
+                                    <Dropdown.Item key={obj.value}
                                     onClick={(e)=> handleClick(e, obj.value, o[1])}>{o[0]}</Dropdown.Item>
                                     )}
                         </DropdownButton>
                         </Col>
-
-)
-})}
+                    )
+                })}
             </Row>
         </Navbar>
         </Container>

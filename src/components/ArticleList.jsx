@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import {Container , Row, Col, Navbar} from 'react-bootstrap'
 
-import { getArticles, getArticlesWithParams } from "../utils/api";
+import { getArticlesWithParams } from "../utils/api";
 import ErrorPage from "./ErrorPage";
 import LoadingSpinner from "./Spinner";
 import FilterBar from "./FilterBar";
@@ -18,8 +18,6 @@ export default function ArticleList(){
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
-    const [sortBy, setSortBy] = useState("created_at");
-    const [order, setOrder] = useState("desc");
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
 
@@ -69,7 +67,6 @@ export default function ArticleList(){
             setLoading(false);
             setError(false);
         }).catch((err)=> {
-            console.log(err);
             setLoading(false);
             setError(true);
         })
