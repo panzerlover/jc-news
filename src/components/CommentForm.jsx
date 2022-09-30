@@ -4,7 +4,7 @@ import { UserContext } from "../contexts/UserContext";
 import { commentOnArticle } from "../utils/api";
 import ErrorPage from "./ErrorPage";
 
-export default function CommentForm({show, article_id, setComments}){
+export default function CommentForm({show, article_id, setPinnedComment}){
 
     const user = useContext(UserContext);
     const [submitting, setSubmitting] = useState(false);
@@ -22,13 +22,10 @@ export default function CommentForm({show, article_id, setComments}){
                 body: comment
             };
             commentOnArticle(article_id, body)
-            .then((res)=> {
-                setComments((old) =>{
-                    const newComments = [res.comment, ...old];
-                    setSubmitting(false);
-                    setComment("");
-                    return newComments;
-                })
+            .then((res)=> {              
+                setPinnedComment(res.comment);  
+                setSubmitting(false);
+                setComment("");
             })
             .catch((err)=> {
                 setError(true);

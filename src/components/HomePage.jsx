@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react"
-import { Accordion, Button } from "react-bootstrap";
+import { Accordion, Container} from "react-bootstrap";
 import { getArticlesWithParams } from "../utils/api";
-import SmallArticleCard from "./SmallArticleCard";
 import ArticleModal from "./ArticleModal";
 import SingleArticle from "./SingleArticle";
+import FeaturedArticleList from "./FeaturedArticleList";
 
 export default function HomePage(){
 
@@ -29,42 +29,19 @@ export default function HomePage(){
     };
 
     return (
-        <>
+        <Container>
         <ArticleModal show={showModal} setShow={setShowModal}>
             <SingleArticle sentArticle={article}/>
         </ArticleModal>
         <Accordion flush alwaysOpen defaultActiveKey={["0", "1"]}>
-        <Accordion.Item eventKey="0">
-            <Accordion.Header>
-                <h2>
-                    Top Voted Articles
-                </h2>
-            </Accordion.Header>
-            <Accordion.Body>
-            {topArticles.map((article)=> 
-                        <SmallArticleCard key={`top${article.article_id}`} article={article} handleShow={handleShow}/>
-                        )}
-                <Button>
-                    See More Top Articles
-                </Button>
-            </Accordion.Body>
-        </Accordion.Item>
-        <Accordion.Item eventKey="1">
-            <Accordion.Header>
-        <h2> Newest Articles </h2>
-            </Accordion.Header>
-            <Accordion.Body>
-                {newArticles.map((article)=> 
-                <SmallArticleCard key={`new${article.article_id}`}article={article} handleShow={handleShow}/>
-                )}
-            <Button variant="primary">
-                    See More New Articles
-            </Button>
-            </Accordion.Body>
-        </Accordion.Item>
+            <Accordion.Item eventKey="0">
+                <FeaturedArticleList articles={topArticles} title="Top Articles" handleShow={handleShow} sort="votes" order="desc"/>
+            </Accordion.Item>
+            <Accordion.Item eventKey="1">
+                <FeaturedArticleList articles={newArticles} title="New Articles" handleShow={handleShow} sort="created_at" order="asc"/>
+            </Accordion.Item>
         </Accordion>
-
-        </>
+        </Container>
     )
 
 }

@@ -21,7 +21,8 @@ export default function SingleArticle({sentArticle}) {
     const [comments, setComments] = useState([])
     const [showComments, setShowComments] = useState(false);
     const [makingComment, setMakingComment] = useState(false);
-
+    const [pinnedComment, setPinnedComment] = useState(null);
+   
     useEffect(()=> {
         if (!sentArticle){
             setLoading(true);
@@ -102,8 +103,8 @@ export default function SingleArticle({sentArticle}) {
                     </Button>
                 : <></>
                 }
-                <CommentForm show={makingComment} article_id={article.article_id} setComments={setComments}/>
-                <CommentList show={showComments} article_id={article.article_id} comments={comments} setComments={setComments}/>
+                <CommentForm show={makingComment} article_id={article.article_id} setComments={setComments} setPinnedComment={setPinnedComment} />
+                <CommentList show={showComments} article_id={article.article_id} comments={comments} setComments={setComments} pinnedComment={pinnedComment}/>
             </Container>
     )
 

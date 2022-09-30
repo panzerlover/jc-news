@@ -14,7 +14,7 @@ export default function PageBar({page, setPage, total_count, limit=10, setLimit}
         }
         return newArr;
     })
-   },[])
+   },[limit, total_count])
 
     const handleClick= (e)=> {
         console.log(page);
