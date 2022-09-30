@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Card, Container, Row} from "react-bootstrap";
+import { UserContext } from "../contexts/UserContext";
 import { getArticleComments, voteOnComment } from "../utils/api";
 import ErrorPage from "./ErrorPage";
 import PageBar from "./PageBar";
@@ -7,14 +8,16 @@ import LoadingSpinner from "./Spinner";
 import VoteBar from "./VoteBar";
 
 
-export default function CommentList({show, article_id, comments, setComments}){
+export default function CommentList({show, article_id}){
 
+    const user = useContext(UserContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [vote, castVote] = useState({inc_votes: 0, voteId: null});
     const [totalCount, setTotalCount] = useState(0);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
+    const [comments, setComments] = useState([]);
 
     useEffect(()=> {
         setLoading(true);
@@ -46,6 +49,19 @@ export default function CommentList({show, article_id, comments, setComments}){
 
     return (
         <Container>
+            {comments.map((comment)=> 
+                <Card key={comment.comment_id}>
+                    <Card.Body>
+                        {comment.body}
+                    </Card.Body>
+                    <Card.Subtitle>
+                        {(comment.author === user.username) ? "you" : comment.author}
+                    </Card.Subtitle>
+                    <Card.Footer>
+                        <VoteBar votes={comment.votes} castVote={castVote} voteId={comment.comment_id}/>
+                    </Card.Footer>
+                </Card>
+            )}
             <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit}/>
         </Container>
     )

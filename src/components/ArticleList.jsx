@@ -91,18 +91,16 @@ export default function ArticleList(){
             {articles.map((article)=> {
                 return (
                     <Col key={article.article_id}>
-                        <SmallArticleCard article={article} handleShow={handleShow}/>
+                        <SmallArticleCard article={article} handleShow={handleShow} />
                     </Col>
                 )
             })}
         </Row>
         </Container>
         <Container fluid>
-
-        <Navbar bg='light' variant='light' fixed="bottom" style={{zIndex: '50'}}>
-
-        <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit}/>
-        </Navbar>
+            <Navbar bg='light' variant='light' fixed="bottom" style={{zIndex: '50'}}>
+                <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit}/>
+            </Navbar>
         </Container>
     </Container>
 )
