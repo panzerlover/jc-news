@@ -3,10 +3,13 @@ import {Card, Row, Col, Button} from 'react-bootstrap'
 import { UserContext } from '../contexts/UserContext'
 
 import { dateDiff } from '../utils/helpers';
+import ErrorPage from './ErrorPage';
 
 export default function SmallArticleCard({article, handleShow}){
 
     const user = useContext(UserContext);
+
+    if (!article ||  !handleShow ) return <ErrorPage />
 
  return (
     <Card>

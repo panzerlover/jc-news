@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
-import { Button, ButtonGroup, DropdownButton } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { deleteComment } from "../utils/api";
 
-export default function DeleteButton ({commentId, setDeletedComment}){
+export default function DeleteButton ({commentId, setDeletedComment, setComments}){
 
     const [timesClicked, setTimesClick] = useState(0);
+    const [error, setError] = useState(null);
 
     const handleClick= () => {
         setTimesClick((old)=> old + 1);
@@ -18,13 +19,25 @@ export default function DeleteButton ({commentId, setDeletedComment}){
         if (timesClicked === 2){
             deleteComment(commentId).then(()=> {
                 setTimesClick(0);
-                setDeletedComment(commentId)
+                setDeletedComment((previous)=> {
+                    if (null !== previous){
+                        setComments((old)=> {
+                            const newComments = [];
+                            old.forEach(comment => {
+                                if (comment.comment_id !== previous) newComments.push(comment)
+                            })
+                            return newComments;
+                        })
+                    }
+                    return commentId})
             }).catch((error)=> {
-                console.error(error);
+                setError(true);
             })
         }
 
-    },[timesClicked])
+    },[timesClicked, commentId, setComments, setDeletedComment])
+
+    if (error) return <Button disabled>Something went Wrong</Button>
 
     if (timesClicked === 0) return <Button onClick={handleClick}>Delete Comment</Button>
     if (timesClicked === 1) return (

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import {Container , Row, Col, Navbar} from 'react-bootstrap'
 
-import { getArticlesWithParams } from "../utils/api";
+import { getArticlesWithParams, getTopics } from "../utils/api";
 import ErrorPage from "./ErrorPage";
 import LoadingSpinner from "./Spinner";
 import FilterBar from "./FilterBar";
@@ -23,12 +23,25 @@ export default function ArticleList(){
 
     const [showModal, setShowModal] = useState(false);
     const [article, setArticle] = useState({});
+    const [topics, setTopics] = useState([]);
 
     const handleShow = (event, article) => {
         setArticle(article);
         setShowModal(true);
     };
 
+    useEffect(()=> {
+        setLoading(true);
+        getTopics()
+        .then((res)=> {
+            setTopics(res.topics);
+            setLoading(false);
+        }).catch((error)=> {
+            setLoading(false);
+            setError("Error while trying to load topics");
+        })
+
+    }, []);
 
     useEffect(()=> {
         const paramsObj = {}
@@ -65,21 +78,21 @@ export default function ArticleList(){
                 setArticles(articles);
             }
             setLoading(false);
-            setError(false);
+            setError(null);
         }).catch((err)=> {
             setLoading(false);
-            setError(true);
+            setError(err.code);
         })
 
     }, [topic_slug, limit, setLimit, page, setPage, searchParams, setSearchParams])
 
     if (loading) return <LoadingSpinner loadingType="Articles"/>;
-    if (error) return <ErrorPage />
+    if (error) return <ErrorPage error={error}/>
 
     return (
 
     <Container>
-        <FilterBar />
+        <FilterBar topics={topics}/>
         <Container>
         <ArticleModal show={showModal} setShow={setShowModal}>
             <SingleArticle sentArticle={article}/>
@@ -96,7 +109,7 @@ export default function ArticleList(){
         </Container>
         <Container fluid>
             <Navbar bg='light' variant='light' fixed="bottom" style={{zIndex: '50'}}>
-                <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit}/>
+                <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit} setError={setError} type="article"/>
             </Navbar>
         </Container>
     </Container>

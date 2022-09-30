@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ButtonGroup, Button, Row, Col } from "react-bootstrap";
+import ErrorPage from "./ErrorPage";
 
 export default function VoteBar({votes, castVote, voteId}){
 
@@ -12,6 +13,8 @@ export default function VoteBar({votes, castVote, voteId}){
         })
         castVote({inc_votes: voteAsNum, voteId: voteId});
     }
+
+    if ( null === votes || !castVote || !voteId) return <ErrorPage />
 
     return (
         <Row>

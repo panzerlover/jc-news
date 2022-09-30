@@ -15,7 +15,7 @@ export default function SingleArticle({sentArticle}) {
     const {article_id} = useParams();
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
     const [article, setArticle] = useState({});
     const [vote, castVote] = useState({inc_votes: 0, voteId: article.article_id});
     const [comments, setComments] = useState([])
@@ -32,7 +32,7 @@ export default function SingleArticle({sentArticle}) {
                 setLoading(false);
             }).catch((err)=> {
                 setLoading(false);
-                setError(true);
+                setError("Article does not exist");
             })
         } else {
             setArticle(sentArticle)
@@ -43,7 +43,6 @@ export default function SingleArticle({sentArticle}) {
         if (vote.inc_votes !== 0){
             voteOnArticle(vote.voteId, vote.inc_votes)
             .catch((error)=> {
-                setError(true);
                 voteOnArticle(vote.voteId, -vote.inc_votes);
             })
         }
@@ -64,7 +63,7 @@ export default function SingleArticle({sentArticle}) {
         })
     }
     if (loading) return <LoadingSpinner loadingType="Article"/>;
-    if (error) return <ErrorPage />;
+    if (error) return <ErrorPage error={error}/>;
 
     return (
             <Container className="article-wrapper">

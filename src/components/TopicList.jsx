@@ -10,7 +10,7 @@ import LoadingSpinner from './Spinner';
 export default function TopicList(){
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
     const [topics, setTopics] = useState([]);
 
     useEffect(()=> {
@@ -21,13 +21,13 @@ export default function TopicList(){
             setLoading(false);
         }).catch((error)=> {
             setLoading(false);
-            setError(true);
+            setError("Error while trying to load topics");
         })
 
     }, []);
 
     if (loading) return <LoadingSpinner loadingType="topics"/>
-    if (error) return <ErrorPage />
+    if (error) return <ErrorPage error={error}/>
 
     return (
         <Container>

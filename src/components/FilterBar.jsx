@@ -1,31 +1,13 @@
-import { useEffect, useState } from "react";
 import { Container, Col, Navbar, Row, DropdownButton, Dropdown } from "react-bootstrap";
 import { useParams, useSearchParams } from "react-router-dom";
-import { getTopics } from "../utils/api";
-import ErrorPage from "./ErrorPage";
 import LoadingSpinner from "./Spinner";
 
-export default function FilterBar () {
+export default function FilterBar ({topics}) {
 
     const {topic_slug} = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
-    const [topics, setTopics] = useState([]);
-    const [loading,setLoading] = useState(false);
-    const [error, setError] = useState(false);
 
-    useEffect(()=> {
-        setLoading(true);
-        getTopics().then(
-            (res)=> {
-                setTopics(res.topics)
-                setLoading(false);
-            }
-        ).catch((err)=> {
-            setLoading(false);
-            setError(true);
-        })
-    },[])
-
+    
     const filterVals = [
         {
             label: "Sort",
@@ -54,41 +36,44 @@ export default function FilterBar () {
             return newVals;
         })
     }
-    if (loading) return <LoadingSpinner loadingType="Topics"/>;
-    if (error) return <ErrorPage />
+
+
+    const topicButton = (
+        <DropdownButton key="topicDropdown"size="sm" title="Topic">
+                        {topics.map((topic)=> 
+                           topic.slug === topic_slug ?
+                           <Dropdown.Item key={topic_slug} href={`/articles/${topic.slug}`} style={{textDecoration: 'underline'}}>
+                           {topic.slug}
+                            </Dropdown.Item>
+                           :
+                            <Dropdown.Item key={topic.slug} href={`/articles/${topic.slug}`}>
+                                {topic.slug}
+                            </Dropdown.Item>
+                        )}
+                </DropdownButton>
+    )
 
     return (
         <Container>
             <Navbar bg="light" fixed="top" style={{top : "50px"}} className="justify-content-center">
             <Row sm={3}>
-                <Col key="topicDropDown">
-                <DropdownButton size="sm" title="Topic">
-                        {topics.map((topic)=> 
-                           topic.slug === topic_slug ?
-                           <Dropdown.Item key={topic.slug} href={`/articles/${topic.slug}`} style={{textDecoration: 'underline'}}>
-                           {topic.slug}
-                            </Dropdown.Item>
-                           :
-                            <Dropdown.Item key={topic_slug} href={`/articles/${topic.slug}`}>
-                                {topic.slug}
-                            </Dropdown.Item>
-                        )}
-                </DropdownButton>
+                <Col key="topicCol">
+                {topics === [] || topics.length === 0 || !topics ? <LoadingSpinner/> : topicButton}               
                 </Col>
                 {filterVals.map((obj)=> {
                     return (
-                        <Col key={obj.label + "dropdown"}>
-                        <DropdownButton size="sm" title={obj.label}>
+                        <Col key={obj.label + "column"}>
+                        <DropdownButton key={obj.label + "Dropdown"} size="sm" title={obj.label}>
                                     {obj.options.map((o)=> 
                                     searchParams.get(obj.value) === o[1] ? 
-                                    <Dropdown.Item key={obj.value}
+                                    <Dropdown.Item key={o[1]}
                                     onClick={(e)=> handleClick(e, obj.value, o[1])}
                                     style={{textDecoration: 'underline'}}
                                     >
                                     {o[0]}
                                     </Dropdown.Item>
                                     :
-                                    <Dropdown.Item key={obj.value}
+                                    <Dropdown.Item key={o[1]}
                                     onClick={(e)=> handleClick(e, obj.value, o[1])}>{o[0]}</Dropdown.Item>
                                     )}
                         </DropdownButton>
