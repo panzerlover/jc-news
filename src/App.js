@@ -8,8 +8,8 @@ import HeaderBar from './components/HeaderBar';
 import TopicList from './components/TopicList';
 import ErrorPage from './components/ErrorPage';
 
-function App() {
 
+function App() {
 
   return (
     <UserContext.Provider value={{username: "grumpy19"}}>
@@ -18,10 +18,10 @@ function App() {
         <HeaderBar />
         <Routes>
           <Route path="/" element={<HomePage />}/>
-          <Route path="/articles" element={<ArticleList/>}/>
+          <Route path="/articles" element={<ArticleList />}/>
           <Route path="/articles/:topic_slug" element={<ArticleList />}/>
           <Route path="/article/:article_id" element={<SingleArticle/>}/>
-          <Route path="/topics" element={<TopicList/>}/>
+          <Route path="/topics" element={<TopicList />}/>
           <Route path="*" element={<ErrorPage error="404: Page Not Found"/>}/>
         </Routes>      
       </div>

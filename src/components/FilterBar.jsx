@@ -1,31 +1,13 @@
-import { useEffect, useState } from "react";
 import { Container, Col, Navbar, Row, DropdownButton, Dropdown } from "react-bootstrap";
 import { useParams, useSearchParams } from "react-router-dom";
-import { getTopics } from "../utils/api";
-import ErrorPage from "./ErrorPage";
 import LoadingSpinner from "./Spinner";
 
-export default function FilterBar () {
+export default function FilterBar ({topics}) {
 
     const {topic_slug} = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
-    const [topics, setTopics] = useState([]);
-    const [loading,setLoading] = useState(false);
-    const [error, setError] = useState(false);
 
-    useEffect(()=> {
-        setLoading(true);
-        getTopics().then(
-            (res)=> {
-                setTopics(res.topics)
-                setLoading(false);
-            }
-        ).catch((err)=> {
-            setLoading(false);
-            setError(true);
-        })
-    },[])
-
+    
     const filterVals = [
         {
             label: "Sort",
@@ -54,15 +36,10 @@ export default function FilterBar () {
             return newVals;
         })
     }
-    if (loading) return <LoadingSpinner loadingType="Topics"/>;
-    if (error) return <ErrorPage />
 
-    return (
-        <Container>
-            <Navbar bg="light" fixed="top" style={{top : "50px"}} className="justify-content-center">
-            <Row sm={3}>
-                <Col key="topicCol">
-                <DropdownButton key="topicDropdown"size="sm" title="Topic">
+
+    const topicButton = (
+        <DropdownButton key="topicDropdown"size="sm" title="Topic">
                         {topics.map((topic)=> 
                            topic.slug === topic_slug ?
                            <Dropdown.Item key={topic_slug} href={`/articles/${topic.slug}`} style={{textDecoration: 'underline'}}>
@@ -74,6 +51,14 @@ export default function FilterBar () {
                             </Dropdown.Item>
                         )}
                 </DropdownButton>
+    )
+
+    return (
+        <Container>
+            <Navbar bg="light" fixed="top" style={{top : "50px"}} className="justify-content-center">
+            <Row sm={3}>
+                <Col key="topicCol">
+                {topics === [] || topics.length === 0 || !topics ? <LoadingSpinner/> : topicButton}               
                 </Col>
                 {filterVals.map((obj)=> {
                     return (

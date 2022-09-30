@@ -26,14 +26,19 @@ export default function CommentList({show, article_id, comments, setComments, pi
             getArticleComments(article_id, {params: {page: page, limit: limit}}).then(({comments, total_count})=> {
                 setTotalCount(total_count);
                 if (pinnedComment){
-                    setComments([pinnedComment, ...comments])
+                    const newComments = []
+                    newComments.push(pinnedComment);
+                    comments.forEach(comment => {
+                        if (comment.comment_id !== pinnedComment.comment_id ) newComments.push(comment)
+                    })
+                    setComments(newComments)
                 } else {
                     setComments(comments);
                 }
                 setLoading(false);
             }).catch((err)=> {
                 setLoading(false);
-                setError(true);
+                setError(err.code);
             })
         }
     },[article_id, show, setComments, page, limit, pinnedComment])
@@ -47,7 +52,7 @@ export default function CommentList({show, article_id, comments, setComments, pi
             })
         }
     }, [vote, castVote])
-    
+
     if (!show) return <></>
     if (loading) return <LoadingSpinner loadingType="Comments"/>;
     if (error) return <ErrorPage />
@@ -64,7 +69,12 @@ export default function CommentList({show, article_id, comments, setComments, pi
                         {(comment.author === user.username) ? "you" : comment.author}
                     </Card.Subtitle>
                     <Card.Footer>
-                        {(comment.author === user.username) ? <DeleteButton commentId={comment.comment_id} setDeletedComment={setDeletedComment}/> : <></>}
+                        {(comment.author === user.username) ? 
+                        <DeleteButton 
+                        commentId={comment.comment_id} 
+                        setComments={setComments} 
+                        setDeletedComment={setDeletedComment}
+                        /> : <></>}
                         <VoteBar votes={comment.votes} castVote={castVote} voteId={comment.comment_id}/>
                     </Card.Footer>
                 </Card>    
@@ -75,7 +85,7 @@ export default function CommentList({show, article_id, comments, setComments, pi
                     </Card.Body>
                 </Card>
             )}
-            <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit}/>
+            <PageBar page={page} setPage={setPage} total_count={totalCount} limit={limit} setLimit={setLimit} setError={setError} type="comment"/>
         </Container>
     )
 }

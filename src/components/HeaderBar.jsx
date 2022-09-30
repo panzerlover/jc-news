@@ -9,19 +9,24 @@ export default function HeaderBar(){
 return (
     
         <Navbar bg="light" variant="light" fixed="top" style={{zIndex: '100'}}>
-        <Container>
-
-        <Navbar.Brand href="/">JC News</Navbar.Brand>
+            <Container>
+            <Navbar.Brand href="/">JC News</Navbar.Brand>
             <Nav>
                 <Navbar.Text >
                     <small style={{textDecoration: 'underline'}}>
                         {user.username}
                     </small>
                 </Navbar.Text>
-                <Nav.Link href="/articles">Articles</Nav.Link>
-                <Nav.Link href="/topics">Topics</Nav.Link>
             </Nav>
-        </Container>
+            </Container>
+        <Navbar.Collapse>
+            <Container>
+                <Nav>
+                    <Nav.Link href="/articles">Articles</Nav.Link>
+                    <Nav.Link href="/topics">Topics</Nav.Link>
+                </Nav>
+            </Container>
+        </Navbar.Collapse>
         </Navbar>
     );
 }

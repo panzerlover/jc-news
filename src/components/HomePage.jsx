@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Accordion, Container} from "react-bootstrap";
+import { Accordion, Button, Container} from "react-bootstrap";
 import { getArticlesWithParams } from "../utils/api";
 import ArticleModal from "./ArticleModal";
 import SingleArticle from "./SingleArticle";
@@ -41,6 +41,12 @@ export default function HomePage(){
                 <FeaturedArticleList articles={newArticles} title="New Articles" handleShow={handleShow} sort="created_at" order="asc"/>
             </Accordion.Item>
         </Accordion>
+        <Container style={{marginTop: "10px"}}>
+            <Button href="/articles">View All Articles</Button>
+        </Container>
+        <Container style={{marginTop: "10px"}}>
+            <Button href="/topics">View All Topics</Button>
+        </Container>
         </Container>
     )
 
